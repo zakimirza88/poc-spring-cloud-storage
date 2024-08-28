@@ -9,3 +9,10 @@ spring:
         secret-key:
       region:
         static:
+    oci:
+      compartment:
+        static:
+      config:
+        type:
+      region:
+        static:
