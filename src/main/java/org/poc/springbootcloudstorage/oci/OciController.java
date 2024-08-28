@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oracle.cloud.spring.storage.OracleStorageResource;
@@ -22,17 +23,16 @@ public class OciController {
         this.storage = storage;
     }
 
-    @GetMapping("/files/oci")
-    public ResponseEntity<ByteArrayResource> test() throws IOException {
+    @GetMapping("/files/oci/{fileName}")
+    public ResponseEntity<ByteArrayResource> download(@PathVariable(name = "fileName") String key) throws IOException {
         String bucketName = "oci-da-docs";
-        String fileName = "Lorem-ipsum.pdf";
 
-        OracleStorageResource resource = storage.download(bucketName, fileName);
+        OracleStorageResource resource = storage.download(bucketName, key);
         byte[] bytes = resource.getContentAsByteArray();
 
         return ResponseEntity
                 .ok()
-                .headers(contentDisposition(fileName))
+                .headers(contentDisposition(key))
                 .contentType(MediaType.APPLICATION_PDF)
                 .contentLength(bytes.length)
                 .body(new ByteArrayResource(bytes));
