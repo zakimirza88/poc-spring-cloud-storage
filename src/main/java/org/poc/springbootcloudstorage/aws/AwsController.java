@@ -8,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,9 +19,11 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 @RestController
 public class AwsController {
 
+    private final String bucketName;
     private final S3Client s3Client;
 
     public AwsController(S3Client s3Client) {
+        this.bucketName = "aws-da-docs";
         this.s3Client = s3Client;
     }
 
@@ -31,14 +32,11 @@ public class AwsController {
         return String.format("Hello %s", name);
     }
 
-    @GetMapping("/files/aws/{fileName}")
-    public ResponseEntity<ByteArrayResource> download(@PathVariable(name = "fileName") String key) throws IOException {
-        String bucketName = "aws-da-docs";
-
+    @GetMapping("/files/aws")
+    public ResponseEntity<ByteArrayResource> download(@RequestParam(name = "fileName") String key) throws IOException {
         GetObjectRequest s3Request = s3GetObjectRequest(bucketName, key);
         ResponseInputStream<GetObjectResponse> response = s3Client.getObject(s3Request);
         byte[] bytes = response.readAllBytes();
-
         return ResponseEntity
                 .ok()
                 .headers(contentDisposition(key))
