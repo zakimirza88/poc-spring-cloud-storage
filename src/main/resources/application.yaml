@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: spring-boot-cloud-storage
+
+  cloud:
+    aws:
+      credentials:
+        access-key:
+        secret-key:
+      region:
+        static:
