@@ -43,6 +43,18 @@ public class OciController {
                 .body(new ByteArrayResource(bytes));
     }
 
+    @PostMapping("/files/oci")
+    public ResponseEntity<?> upload(@RequestPart(name = "file") MultipartFile file,
+            @RequestParam(name = "fileName", required = false) String key) throws IOException {
+        try (InputStream is = file.getInputStream()) {
+            storage.upload(bucketName,
+                    StringUtils.hasText(key) ? key : file.getOriginalFilename(),
+                    is,
+                    StorageObjectMetadata.builder().contentType(file.getContentType()).build());
+        }
+        return ResponseEntity.ok().build();
+    }
+
     private HttpHeaders contentDisposition(String fileName) {
         ContentDisposition contentDisposition = ContentDisposition
                 .builder("attachment")
