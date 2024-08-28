@@ -17,11 +17,11 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 
 @RestController
-public class Controller {
+public class AwsController {
 
     private final S3Client s3Client;
 
-    public Controller(S3Client s3Client) {
+    public AwsController(S3Client s3Client) {
         this.s3Client = s3Client;
     }
 
