@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,26 +31,27 @@ public class AwsController {
         return String.format("Hello %s", name);
     }
 
-    @GetMapping("/files/aws")
-    public ResponseEntity<ByteArrayResource> test() throws IOException {
-        String bucketName = "demo-da-docs";
-        String fileName = "lorem IPSUM.pdf";
-        GetObjectRequest s3Request = s3GetObjectRequest(bucketName, fileName);
+    @GetMapping("/files/aws/{fileName}")
+    public ResponseEntity<ByteArrayResource> download(@PathVariable(name = "fileName") String key) throws IOException {
+        String bucketName = "aws-da-docs";
+
+        GetObjectRequest s3Request = s3GetObjectRequest(bucketName, key);
         ResponseInputStream<GetObjectResponse> response = s3Client.getObject(s3Request);
         byte[] bytes = response.readAllBytes();
+
         return ResponseEntity
                 .ok()
-                .headers(contentDisposition(fileName))
+                .headers(contentDisposition(key))
                 .contentType(MediaType.APPLICATION_PDF)
                 .contentLength(bytes.length)
                 .body(new ByteArrayResource(bytes));
     }
 
-    private GetObjectRequest s3GetObjectRequest(String bucketName, String fileName) {
+    private GetObjectRequest s3GetObjectRequest(String bucketName, String key) {
         return GetObjectRequest
                 .builder()
                 .bucket(bucketName)
-                .key(fileName)
+                .key(key)
                 .build();
     }
 
