@@ -13,14 +13,14 @@
 
     <groupId>org.poc</groupId>
     <artifactId>poc-spring-cloud-storage</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>poc-spring-cloud-storage</name>
     <description>Proof of concept - Spring boot cloud storage</description>
 
     <properties>
         <java.version>17</java.version>
-        <spring.cloud.aws.version>3.0.0</spring.cloud.aws.version>
+        <spring.cloud.aws.version>3.1.1</spring.cloud.aws.version>
         <spring.cloud.oci.version>1.2.0</spring.cloud.oci.version>
     </properties>
 
@@ -30,18 +30,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- The following is needed for Log4j2 with SLF4J -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j2-impl</artifactId>
         </dependency>
 
         <!-- Spring Cloud AWS -->
@@ -56,11 +44,6 @@
             <artifactId>spring-cloud-oci-starter-storage</artifactId>
         </dependency>
 
-        <!-- The following is needed for Apache HttpClient wire logging -->
-        <!--        <dependency>
-                    <groupId>org.apache.logging.log4j</groupId>
-                    <artifactId>log4j-1.2-api</artifactId>
-                </dependency>-->
     </dependencies>
 
     <dependencyManagement>
@@ -77,7 +60,7 @@
             <dependency>
                 <groupId>com.oracle.cloud.spring</groupId>
                 <artifactId>spring-cloud-oci-dependencies</artifactId>
-                <version>1.2.0</version>
+                <version>${spring.cloud.oci.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
