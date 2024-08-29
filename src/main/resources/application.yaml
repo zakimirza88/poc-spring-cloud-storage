@@ -9,10 +9,28 @@ spring:
         secret-key:
       region:
         static:
+
     oci:
+      adb:
+        enabled: false
+      function:
+        enabled: false
+      genai:
+        enabled: false
+      queue:
+        enabled: false
+      vault:
+        enabled: false
+      storage:
+        enabled: true
       compartment:
         static:
-      config:
-        type:
       region:
         static:
+      config:
+        type: simple
+        profile: default
+        tenant-id:
+        user-id:
+        fingerprint:
+        private-key:
