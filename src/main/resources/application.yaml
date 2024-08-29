@@ -34,3 +34,9 @@ spring:
         user-id:
         fingerprint:
         private-key:
+        private-key: |
+          -----BEGIN KEY-----
+          T77r/TgK1wKBgCDTh4/etBi6Q/blaBlaBlacRvVYfcbr7WVqIYieDa28Fu+3a28K
+          kEWAJjKfYYq4dAKJolnDvHw+/glY4C8vaOZOPKf05fmX6j8XuSN+P1c2qVjjdP/2
+          wF3eX9e7eUNdcSj4F6jHSd4=
+          -----END KEY-----
