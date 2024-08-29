@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,6 +53,12 @@ public class OciController {
                     is,
                     StorageObjectMetadata.builder().contentType(file.getContentType()).build());
         }
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/files/oci")
+    public ResponseEntity<?> delete(@RequestParam(name = "fileName") String key) {
+        storage.deleteObject(bucketName, key);
         return ResponseEntity.ok().build();
     }
 
