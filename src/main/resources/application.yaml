@@ -33,7 +33,6 @@ spring:
         tenant-id:
         user-id:
         fingerprint:
-        private-key:
         private-key: |
           -----BEGIN KEY-----
           T77r/TgK1wKBgCDTh4/etBi6Q/blaBlaBlacRvVYfcbr7WVqIYieDa28Fu+3a28K
