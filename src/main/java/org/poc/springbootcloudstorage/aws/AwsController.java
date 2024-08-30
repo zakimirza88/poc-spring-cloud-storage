@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -59,6 +61,13 @@ public class AwsController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/files/aws")
+    public ResponseEntity<?> delete(@RequestParam(name = "fileName") String key) {
+        DeleteObjectRequest deleteObjectRequest = s3DeleteObjectRequest(bucketName, key);
+        s3Client.deleteObject(deleteObjectRequest);
+        return ResponseEntity.ok().build();
+    }
+
     private GetObjectRequest s3GetObjectRequest(String bucketName, String key) {
         return GetObjectRequest
                 .builder()
@@ -69,6 +78,13 @@ public class AwsController {
 
     private PutObjectRequest s3PutObjectRequest(String bucketName, String key) {
         return PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+    }
+
+    private DeleteObjectRequest s3DeleteObjectRequest(String bucketName, String key) {
+        return DeleteObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .build();
