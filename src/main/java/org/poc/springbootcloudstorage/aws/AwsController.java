@@ -7,14 +7,20 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import software.amazon.awssdk.core.ResponseInputStream;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 @RestController
 public class AwsController {
@@ -45,9 +51,24 @@ public class AwsController {
                 .body(new ByteArrayResource(bytes));
     }
 
+    @PostMapping("/files/aws")
+    public ResponseEntity<?> upload(@RequestPart(name = "file") MultipartFile file,
+            @RequestParam(name = "fileName", required = false) String key) throws IOException {
+        PutObjectRequest putObjectRequest = s3PutObjectRequest(bucketName, StringUtils.hasText(key) ? key : file.getOriginalFilename());
+        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+        return ResponseEntity.ok().build();
+    }
+
     private GetObjectRequest s3GetObjectRequest(String bucketName, String key) {
         return GetObjectRequest
                 .builder()
+                .bucket(bucketName)
+                .key(key)
+                .build();
+    }
+
+    private PutObjectRequest s3PutObjectRequest(String bucketName, String key) {
+        return PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(key)
                 .build();
